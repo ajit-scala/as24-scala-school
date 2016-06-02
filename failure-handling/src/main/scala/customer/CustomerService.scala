@@ -22,12 +22,19 @@ class CustomerService(repo: CustomerRepo) {
      * Use scala language try/catch to catch exceptions from underlying repo and translate to Option.
      * But only return None for i.e. Customer not found
      */
-  def customerNameOption(id: Int): Option[CustomerName] = ???
+  def customerNameOption(id: Int): Option[CustomerName] =
+      try {
+            Some(new CustomerRepoImpl().getCustomerName(id))
+      }catch {
+        case custEx: CustomerNotFoundException => None
+      }
 
   /**
    * Use Try from Scala library (one liner). Simplification: Don't handle different exception types here.
    */
-  def customerNameTry(id: Int): Try[CustomerName] = ???
+  def customerNameTry(id: Int): Try[CustomerName] = {
+      Try(new CustomerRepoImpl().getCustomerName(id))
+  }
 
   /**
    * Use Scala Library Try for dealing with the exceptions thrown by the customer repo and then translate them to Scalactics Good or Bad.
@@ -36,5 +43,11 @@ class CustomerService(repo: CustomerRepo) {
    *
    * Do you see the benefits in the method signature (self-documentation of code) compared to the above solutions?
    */
-  def customerNameOr(id: Int): CustomerName Or CustomerNotFound = ???
+  def customerNameOr(id: Int): CustomerName Or CustomerNotFound = {
+    Try(new CustomerRepoImpl().getCustomerName(id)) match {
+      case Success(name) => Good(name)
+      case Failure(ex) => Bad(CustomerNotFound(errorMessageNotFound(id)))
+    }
+
+  }
 }
