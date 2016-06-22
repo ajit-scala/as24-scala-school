@@ -6,7 +6,7 @@ case class Address(street: String, no: Int, zip: Int)
 
 object Address {
   //TODO Exercise 2a
-  implicit val addressFormat: Format[Address] = ???
+  implicit val addressFormat: Format[Address] = Json.format[Address]
 }
 
 class Vehicle(val id: Int, val make: String, val model: String, val registAdd: Address)
@@ -16,13 +16,25 @@ object Vehicle {
   implicit val vehicleWrites = new Writes[Vehicle] {
     import Address._
     //TODO Exercise 2b
-    def writes(v: Vehicle) :  JsValue = ???
+    def writes(v: Vehicle) :  JsValue =  JsObject(Seq(("id",JsNumber(v.id)),
+      ("make",JsString(v.make)),
+      ("model",JsString(v.model)),
+      ("registAdd",Json.toJson(v.registAdd))
+        ))
   }
 
   implicit val vehicleReads = new Reads[Vehicle] {
     import Address._
     //TODO Exercise 2c
-    def reads(json: JsValue) : JsResult[Vehicle] = ???
+    def reads(json: JsValue) : JsResult[Vehicle] = {
+      JsSuccess( new Vehicle((json \ "id").as[Int],
+      (json \ "make").as[String],
+      (json \ "model").as[String],
+      (json \ "registAdd").as[Address]))
+
+//asOpt[int] parses only if it is some
+
+    }
   }
 
   var testVehicles = List[Vehicle](
