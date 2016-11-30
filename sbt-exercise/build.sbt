@@ -27,7 +27,7 @@ lazy val UnitTest = config("unit") extend (Test)
 /* Exercise 2-b: Create filters that detect Unit tests and Integration test files */
 
 def itFilter(name: String): Boolean = ???
-def unitFilter(name: String): Boolean = name.endsWith("UnitTest")
+def unitFilter(name: String): Boolean = ???
 
 /* Exercise 2-c: Add configuration to project and apply filters to the testOptions */
 
@@ -39,20 +39,5 @@ lazy val tatsuService: Project = project
   .settings(inConfig(UnitTest)(Defaults.testTasks): _*)
   .settings(
     cleanFiles <+= baseDirectory { base => base / "logs" },
-    testOptions in UnitTest := Seq(Tests.Filter(unitFilter))
+    testOptions in UnitTest := Seq(Tests.Filter(???))
   )
-
-lazy val myTask=taskKey[Unit]("My task")
-myTask := println("This is my task")
-
-lazy val myKey=settingKey[String]("This is my key")
-myKey  := "my no scope value"
-myKey in Test := "my keys test value"
-myKey in Runtime := "my runtime value"
-
-lazy val myTask2=taskKey[Unit]("My task2")
-myTask2 := println(myKey.value)
-myTask2 in Test := println((myKey in Test).value)
-myTask2 in Runtime := println((myKey in Runtime).value)
-
-

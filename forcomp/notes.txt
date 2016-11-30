@@ -1,0 +1,16 @@
+x:List
+
+append / prepend
+s +: 4
+5:+ s
+colon is on the side of list.
+
+---
+a function is an object of one of Function(n) object with an apply method
+--
+methods can be lifted to functions
+---
+MAP/FLATMAP CONTIANER TYPE REMAINS SAME BUT ELEMENT Type can change
+--
+group by identity
+---
